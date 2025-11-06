@@ -1,11 +1,9 @@
 ﻿using Orcamentaria.CompanyService.Domain.Models;
+using Orcamentaria.Lib.Domain.Repositories;
 
 namespace Orcamentaria.CompanyService.Domain.Repositories
 {
-    public interface ICompanyRepository
+    public interface ICompanyRepository : IBasicRepository<Company>
     {
-        Company GetById(long id);
-        Task<Company> Insert(Company company);
-        Task<Company> Update(long id, Company company);
     }
 }

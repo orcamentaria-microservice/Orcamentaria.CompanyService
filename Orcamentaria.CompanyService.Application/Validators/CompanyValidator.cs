@@ -15,7 +15,7 @@ namespace Orcamentaria.CompanyService.Application.Validators
             _repository = repository;
         }
 
-        public CompanyValidator()
+        public void CommonValidation(Company entity)
         {
             RuleFor(x => x.CorporateName)
                 .NotEmpty().WithMessage("O {PropertyName} é obrigatório.")
@@ -44,36 +44,35 @@ namespace Orcamentaria.CompanyService.Application.Validators
                 .WithMessage("O {PropertyName} não é um email válido.")
                 .MaximumLength(100)
                 .WithMessage("O tamanho máximo do {PropertyName} é de {MaxLength} caracteres.");
-
         }
 
         public ValidationResult ValidateBeforeInsert(Company entity)
         {
-            var validator = new CompanyValidator();
+            CommonValidation(entity);
 
-            validator.RuleFor(x => x.Id)
+            RuleFor(x => x.Id)
                 .Empty().WithMessage("O {PropertyName} não deve ser informado.");
 
-            return validator.Validate(entity);
+            return Validate(entity);
         }
 
         public ValidationResult ValidateBeforeUpdate(Company entity)
         {
-            var validator = new CompanyValidator();
+            CommonValidation(entity);
 
-            validator.RuleFor(x => x.Id)
+            RuleFor(x => x.Id)
                 .NotEmpty().WithMessage("O {PropertyName} deve ser informado.");
 
-            validator.RuleFor(x => x.Id)
+            RuleFor(x => x.Id)
                .Must((x, cancelation) =>
                {
-                   var entity = _repository.GetById(x.Id);
+                   var entity = _repository.GetByIdAsync(x.Id).GetAwaiter().GetResult();
 
                    return entity is not null;
 
                }).WithMessage("Id não encontrado.");
 
-            return validator.Validate(entity);
+            return Validate(entity);
         }
     }
 }

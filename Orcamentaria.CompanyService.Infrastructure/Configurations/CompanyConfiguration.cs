@@ -52,6 +52,26 @@ namespace Orcamentaria.CompanyService.Infrastructure.Configurations
                 .HasColumnType("BIT")
                 .HasDefaultValue(true)
                 .IsRequired();
+
+            builder.Property(p => p.CreatedAt)
+                .HasColumnName("CREATED_AT")
+                .HasColumnType("DATETIME")
+                .IsRequired();
+
+            builder.Property(p => p.CreatedBy)
+                .HasColumnName("CREATED_BY")
+                .HasColumnType("BIGINT")
+                .IsRequired();
+
+            builder.Property(p => p.UpdatedAt)
+                .HasColumnName("UPDATED_AT")
+                .HasColumnType("DATETIME")
+                .IsRequired();
+
+            builder.Property(p => p.UpdatedBy)
+                .HasColumnName("UPDATED_BY")
+                .HasColumnType("BIGINT")
+                .IsRequired();
         }
     }
 }

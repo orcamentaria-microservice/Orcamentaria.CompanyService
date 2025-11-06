@@ -10,6 +10,10 @@
         public string TelePhone { get; set; }
         public string CellPhone { get; set; }
         public string Email { get; set; }
-        public bool Active { get; set; }
+        public bool Active { get; set; } = true;
+        public DateTime CreatedAt { get; set; }
+        public long CreatedBy { get; set; }
+        public DateTime UpdatedAt { get; set; }
+        public long UpdatedBy { get; set; }
     }
 }

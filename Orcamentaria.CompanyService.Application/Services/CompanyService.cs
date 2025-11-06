@@ -7,6 +7,7 @@ using Orcamentaria.Lib.Domain.Enums;
 using Orcamentaria.Lib.Domain.Exceptions;
 using Orcamentaria.Lib.Domain.Models;
 using Orcamentaria.Lib.Domain.Models.Exceptions;
+using Orcamentaria.Lib.Domain.Models.Responses;
 using Orcamentaria.Lib.Domain.Validators;
 
 namespace Orcamentaria.CompanyService.Application.Services
@@ -27,14 +28,14 @@ namespace Orcamentaria.CompanyService.Application.Services
             _mapper = mapper;
         }
 
-        public Response<CompanyResponseDTO> GetById(long id)
+        public async Task<Response<CompanyResponseDTO>?> GetByIdAsync(long id)
         {
             try
             {
-                var data = _repository.GetById(id);
+                var data = await _repository.GetByIdAsync(id);
 
                 if (data is null)
-                    throw new InfoException($"Nenhum dado foi encontrado", ErrorCodeEnum.NotFound);
+                    throw new InfoException($"Nenhum dado foi encontrado.", ErrorCodeEnum.NotFound);
 
                 return new Response<CompanyResponseDTO>(_mapper.Map<Company, CompanyResponseDTO>(data));
             }
@@ -48,7 +49,29 @@ namespace Orcamentaria.CompanyService.Application.Services
             }
         }
 
-        public async Task<Response<CompanyResponseDTO>> Insert(CompanyInsertDTO dto)
+        public async Task<Response<IEnumerable<CompanyResponseDTO>>?> GetAsync(GridParams gridParams)
+        {
+            try
+            {
+                var (data, pagination) = await _repository.GetAsync(gridParams);
+
+                if (!data.Any())
+                    throw new InfoException($"Nenhum dado foi encontrado.", ErrorCodeEnum.NotFound);
+
+                return new Response<IEnumerable<CompanyResponseDTO>>(
+                        data.Select(x => _mapper.Map<Company, CompanyResponseDTO>(x)), pagination);
+            }
+            catch (DefaultException)
+            {
+                throw;
+            }
+            catch (Exception ex)
+            {
+                throw new UnexpectedException(ex.Message, ex);
+            }
+        }
+
+        public async Task<Response<CompanyResponseDTO>> InsertAsync(CompanyInsertDTO dto)
         {
             try
             {
@@ -59,7 +82,7 @@ namespace Orcamentaria.CompanyService.Application.Services
                 if (!result.IsValid)
                     throw new ValidationException(result);
 
-                var entity = await _repository.Insert(company);
+                var entity = await _repository.InsertAsync(company);
 
                 return new Response<CompanyResponseDTO>(_mapper.Map<Company, CompanyResponseDTO>(entity));
             }
@@ -73,7 +96,7 @@ namespace Orcamentaria.CompanyService.Application.Services
             }
         }
 
-        public async Task<Response<CompanyResponseDTO>> Update(long id, CompanyUpdateDTO dto)
+        public async Task<Response<CompanyResponseDTO>> UpdateAsync(long id, CompanyUpdateDTO dto)
         {
             try
             {
@@ -86,7 +109,7 @@ namespace Orcamentaria.CompanyService.Application.Services
                 if (!result.IsValid)
                     throw new ValidationException(result);
 
-                var entity = await _repository.Update(id, company);
+                var entity = await _repository.UpdateAsync(id, company);
 
                 return new Response<CompanyResponseDTO>(_mapper.Map<Company, CompanyResponseDTO>(entity));
             }

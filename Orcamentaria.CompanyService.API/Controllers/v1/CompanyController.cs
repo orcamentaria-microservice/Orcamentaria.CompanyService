@@ -4,6 +4,7 @@ using Orcamentaria.CompanyService.Domain.DTOs.Company;
 using Orcamentaria.CompanyService.Domain.Services;
 using Orcamentaria.Lib.Domain.Contexts;
 using Orcamentaria.Lib.Domain.Models;
+using Orcamentaria.Lib.Domain.Models.Responses;
 
 namespace Orcamentaria.CompanyService.API.Controllers.v1
 {
@@ -22,13 +23,27 @@ namespace Orcamentaria.CompanyService.API.Controllers.v1
             _userAuthContext = userAuthContext;
         }
 
+        [Authorize(Roles = "MASTER")]
+        [HttpGet("GetMaster", Name = "CompanyGetOnlyMaster")]
+        public async Task<Response<IEnumerable<CompanyResponseDTO>>?> GetAsync(GridParams gridParams)
+        {
+            try
+            {
+                return await _service.GetAsync(gridParams);
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
         [Authorize(Roles = "MASTER,COMPANY_MASTER,COMPANY:READ")]
-        [HttpGet("GetCompany", Name = "CompanyGetCompany")]
-        public Response<CompanyResponseDTO> GetCompany()
+        [HttpGet("GetCompany", Name = "CompanyGetById")]
+        public async Task<Response<CompanyResponseDTO>?> GetByIdAsync()
         {
             try
             {
-                return _service.GetById(_userAuthContext.UserCompanyId);
+                return await _service.GetByIdAsync(_userAuthContext.CompanyId);
             }
             catch (Exception)
             {
@@ -37,26 +52,12 @@ namespace Orcamentaria.CompanyService.API.Controllers.v1
         }
 
         [Authorize(Roles = "MASTER")]
-        [HttpGet("GetById/{id}", Name = "CompanyGetById")]
-        public Response<CompanyResponseDTO> GetById(long id)
-        {
-            try
-            {
-                return _service.GetById(id);
-            }
-            catch (Exception)
-            {
-                throw;
-            }
-        }
-
-        [Authorize(Roles = "MASTER")]
-        [HttpPost(Name = "CompanyInsert")]
+        [HttpPost("Insert", Name = "CompanyInsertOnlyMaster")]
         public async Task<Response<CompanyResponseDTO>> Insert([FromBody] CompanyInsertDTO dto)
         {
             try
             {
-                return await _service.Insert(dto);
+                return await _service.InsertAsync(dto);
             }
             catch (Exception)
             {
@@ -65,12 +66,12 @@ namespace Orcamentaria.CompanyService.API.Controllers.v1
         }
 
         [Authorize(Roles = "MASTER,COMPANY_MASTER,COMPANY:UPDATE")]
-        [HttpGet(Name = "CompanyUpdate")]
+        [HttpGet("Update", Name = "CompanyUpdate")]
         public async Task<Response<CompanyResponseDTO>> Update([FromBody] CompanyUpdateDTO dto)
         {
             try
             {
-                return await _service.Update(_userAuthContext.UserCompanyId, dto);
+                return await _service.UpdateAsync(_userAuthContext.CompanyId, dto);
             }
             catch (Exception)
             {
@@ -79,12 +80,12 @@ namespace Orcamentaria.CompanyService.API.Controllers.v1
         }
 
         [Authorize(Roles = "MASTER")]
-        [HttpGet("{id}", Name = "CompanyUpdateWithId")]
+        [HttpGet("Update/{id}", Name = "CompanyUpdateOnlyMaster")]
         public async Task<Response<CompanyResponseDTO>> Update(long id, [FromBody] CompanyUpdateDTO dto)
         {
             try
             {
-                return await _service.Update(id, dto);
+                return await _service.UpdateAsync(id, dto);
             }
             catch (Exception)
             {
