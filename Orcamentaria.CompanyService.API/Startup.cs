@@ -7,7 +7,7 @@ using Orcamentaria.CompanyService.Domain.Services;
 using Orcamentaria.CompanyService.Infrastructure.Contexts;
 using Orcamentaria.CompanyService.Infrastructure.Repositories;
 using Orcamentaria.Lib.Domain.Validators;
-using Orcamentaria.Lib.Infrastructure;
+using Orcamentaria.Lib.Infrastructure.Configures;
 
 namespace Orcamentaria.CompanyService.API
 {
@@ -24,20 +24,23 @@ namespace Orcamentaria.CompanyService.API
 
         public void ConfigureServices(IServiceCollection services)
         {
-            Configuration = CommonDI.ResolveConfigs(_serviceName, services, Configuration);
+            Configuration = services.ResolveConfigs(Configuration, _serviceName);
 
             services.Replace(ServiceDescriptor.Singleton(Configuration));
 
-            CommonDI.AddServiceRegistryHosted(services, Configuration);
-            
-            CommonDI.ResolveCommonServicesWithMySql<MySqlContext>
-                (_serviceName, _apiVersion, services, Configuration, () =>
-            {
+            services.AddServiceRegistryHosted(Configuration);
+
+            services.ResolveCommonServicesWithMySql<MySqlContext>(configuration: Configuration,
+                serviceName: _serviceName,
+                apiVersion: _apiVersion,
+                customServices: () =>
+                {
                 //Validators
                 services.AddScoped<IValidatorEntity<Company>, CompanyValidator>();
 
                 //Mappers
-                services.AddAutoMapper(typeof(CompanyMapper));
+                services.AddAutoMapper(_ => { },
+                    typeof(CompanyMapper));
 
                 //Services
                 services.AddScoped<ICompanyService, Application.Services.CompanyService>();
@@ -48,6 +51,6 @@ namespace Orcamentaria.CompanyService.API
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
-			=> CommonDI.ConfigureCommon(_serviceName, _apiVersion, app, env);
+            => app.ConfigureCommon(env, _serviceName, _apiVersion);
     }
 }
