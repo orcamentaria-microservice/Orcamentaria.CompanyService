@@ -14,12 +14,12 @@ namespace Orcamentaria.CompanyService.Application.Services
 {
     public class CompanyService : ICompanyService
     {
-        private readonly ICompanyRepository _repository;
+        private readonly ICompanyRepository<Company> _repository;
         private readonly IValidatorEntity<Company> _validator;
         private readonly IMapper _mapper;
 
         public CompanyService(
-            ICompanyRepository repository, 
+            ICompanyRepository<Company> repository, 
             IValidatorEntity<Company> validator,
             IMapper mapper)
         {
@@ -32,7 +32,7 @@ namespace Orcamentaria.CompanyService.Application.Services
         {
             try
             {
-                var data = await _repository.GetByIdAsync(id);
+                var data = await _repository.GetByIdWithoutCompanyIdAsync(id);
 
                 if (data is null)
                     throw new InfoException($"Nenhum dado foi encontrado.", ErrorCodeEnum.NotFound);

@@ -8,9 +8,9 @@ namespace Orcamentaria.CompanyService.Application.Validators
 {
     public class CompanyValidator : AbstractValidator<Company>, IValidatorEntity<Company>
     {
-        private readonly ICompanyRepository _repository;
+        private readonly ICompanyRepository<Company> _repository;
 
-        public CompanyValidator(ICompanyRepository repository)
+        public CompanyValidator(ICompanyRepository<Company> repository)
         {
             _repository = repository;
         }
@@ -66,7 +66,7 @@ namespace Orcamentaria.CompanyService.Application.Validators
             RuleFor(x => x.Id)
                .Must((x, cancelation) =>
                {
-                   var entity = _repository.GetByIdAsync(x.Id).GetAwaiter().GetResult();
+                   var entity = _repository.GetByIdWithoutCompanyIdAsync(x.Id).GetAwaiter().GetResult();
 
                    return entity is not null;
 

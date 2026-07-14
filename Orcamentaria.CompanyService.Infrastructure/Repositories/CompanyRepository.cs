@@ -6,16 +6,13 @@ using Orcamentaria.Lib.Infrastructure.Repositories;
 
 namespace Orcamentaria.CompanyService.Infrastructure.Repositories
 {
-    public class CompanyRepository : BasicRepository<Company>, ICompanyRepository
+    public class CompanyRepository : BaseRepository<Company>, ICompanyRepository<Company>
     {
-        private readonly MySqlContext _dbContext;
-
         public CompanyRepository(
             MySqlContext dbContext,
             IUserAuthContext userAuthContext)
             : base(dbContext, userAuthContext)
         {
-            _dbContext = dbContext;
         }
     }
 }

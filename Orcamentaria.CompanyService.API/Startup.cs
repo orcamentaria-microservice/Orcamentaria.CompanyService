@@ -30,7 +30,8 @@ namespace Orcamentaria.CompanyService.API
 
             services.AddServiceRegistryHosted(Configuration);
 
-            services.ResolveCommonServicesWithMySql<MySqlContext>(configuration: Configuration,
+            services.ResolveCommonServicesWithMySql<MySqlContext>(
+                configuration: Configuration,
                 serviceName: _serviceName,
                 apiVersion: _apiVersion,
                 customServices: () =>
@@ -46,7 +47,7 @@ namespace Orcamentaria.CompanyService.API
                 services.AddScoped<ICompanyService, Application.Services.CompanyService>();
 
                 //Repositories
-                services.AddScoped<ICompanyRepository, CompanyRepository>();
+                services.AddScoped<ICompanyRepository<Company>, CompanyRepository>();
             });
         }
 
