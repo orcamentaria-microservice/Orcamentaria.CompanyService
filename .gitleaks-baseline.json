@@ -1,0 +1,42 @@
+[
+ {
+  "Description": "BOOTSTRAPSECRET com valor",
+  "StartLine": 11,
+  "EndLine": 11,
+  "StartColumn": 4,
+  "EndColumn": 68,
+  "Match": "REDACTED",
+  "Secret": "REDACTED",
+  "File": "Orcamentaria.CompanyService.API/appsettings.json",
+  "SymlinkFile": "",
+  "Commit": "6cd7f37b17543e18c8f3cd800005ed7138e4be67",
+  "Entropy": 5.4029117,
+  "Author": "Marcelo Fernando Alves Nogueira",
+  "Email": "mafealno@gmail.com",
+  "Date": "2025-11-06T23:10:49Z",
+  "Message": "fix",
+  "Tags": [],
+  "RuleID": "orcamentaria-bootstrap-secret",
+  "Fingerprint": "6cd7f37b17543e18c8f3cd800005ed7138e4be67:Orcamentaria.CompanyService.API/appsettings.json:orcamentaria-bootstrap-secret:11"
+ },
+ {
+  "Description": "BOOTSTRAPSECRET com valor",
+  "StartLine": 11,
+  "EndLine": 11,
+  "StartColumn": 5,
+  "EndColumn": 69,
+  "Match": "REDACTED",
+  "Secret": "REDACTED",
+  "File": "Orcamentaria.CompanyService.API/appsettings.json",
+  "SymlinkFile": "",
+  "Commit": "65e7a52bbea3d3380b0c6cad365d48288d5ced15",
+  "Entropy": 5.2374516,
+  "Author": "Marcelo Fernando Alves Nogueira",
+  "Email": "mafealno@gmail.com",
+  "Date": "2025-11-01T05:12:42Z",
+  "Message": "first commit",
+  "Tags": [],
+  "RuleID": "orcamentaria-bootstrap-secret",
+  "Fingerprint": "65e7a52bbea3d3380b0c6cad365d48288d5ced15:Orcamentaria.CompanyService.API/appsettings.json:orcamentaria-bootstrap-secret:11"
+ }
+]
